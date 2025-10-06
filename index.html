@@ -185,17 +185,28 @@
                     <path d="M10 14H10.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <div>
-                    <strong>Important: First time installation</strong><br>
-                    macOS will show a "damaged" warning because the app isn't code-signed. This is normal for free apps. <strong>Quick fix:</strong>
-                    <ol style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
-                        <li>Download and mount the DMG (or extract the ZIP)</li>
-                        <li>Right-click the <strong>Chill</strong> app → hold <strong>Option</strong> key → choose <strong>Copy "Chill" as Pathname</strong></li>
-                        <li>Open <strong>Terminal</strong> (Applications → Utilities → Terminal)</li>
-                        <li>Type: <code style="display: inline-block; padding: 2px 6px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace;">xattr -cr </code> then paste the path and press Enter</li>
-                        <li>Now open the app normally - it will work!</li>
-                    </ol>
-                    <strong>Example command:</strong> <code style="display: inline-block; padding: 2px 6px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace; font-size: 0.9em;">xattr -cr /Applications/Chill.app</code><br>
-                    The app is safe and <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a>.
+                    <strong>⚠️ First Time Setup Required</strong><br>
+                    macOS will show a "damaged" warning because this free app isn't code-signed ($99/year Apple fee). <strong>Super easy fix:</strong>
+
+                    <div style="margin: 12px 0; padding: 12px; background: rgba(99, 102, 241, 0.1); border-radius: 8px; border-left: 3px solid #6366F1;">
+                        <strong>🚀 Easiest Method (2 clicks):</strong><br>
+                        1. Download the app above<br>
+                        2. <a href="https://github.com/aaronstressfree/chill/releases/download/v1.0.0/fix-chill.sh" style="color: #6366F1; font-weight: 600;">Download fix-chill.sh</a><br>
+                        3. Open Terminal, type: <code style="padding: 2px 6px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace;">bash ~/Downloads/fix-chill.sh</code><br>
+                        4. Done! The script finds and fixes Chill automatically.
+                    </div>
+
+                    <details style="margin-top: 8px;">
+                        <summary style="cursor: pointer; color: rgba(255,255,255,0.8); font-size: 0.9em;">Alternative: Manual fix</summary>
+                        <div style="margin-top: 8px; padding-left: 12px; font-size: 0.9em; line-height: 1.6;">
+                            In Terminal, run: <code style="padding: 2px 6px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace;">xattr -cr /Applications/Chill.app</code><br>
+                            (Replace path if installed elsewhere)
+                        </div>
+                    </details>
+
+                    <div style="margin-top: 8px; font-size: 0.9em; opacity: 0.8;">
+                        You only need to do this once. The app is safe and <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a>.
+                    </div>
                 </div>
             </div>
         </div>
