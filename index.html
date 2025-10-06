@@ -186,14 +186,16 @@
                 </svg>
                 <div>
                     <strong>Important: First time installation</strong><br>
-                    macOS will show a "damaged" warning because the app isn't code-signed. This is normal for free apps without an Apple Developer certificate. To install:
+                    macOS will show a "damaged" warning because the app isn't code-signed. This is normal for free apps. <strong>Easiest fix:</strong>
                     <ol style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
-                        <li>Download and try to open the app (you'll see the warning)</li>
-                        <li>Open <strong>System Settings → Privacy & Security</strong></li>
-                        <li>Scroll down and click <strong>"Open Anyway"</strong> next to the Chill warning</li>
-                        <li>Click <strong>"Open"</strong> in the confirmation dialog</li>
+                        <li>Download the DMG or ZIP file</li>
+                        <li>Open <strong>Terminal</strong> (Applications → Utilities → Terminal)</li>
+                        <li>Run this command (drag the downloaded file into Terminal after typing the command):<br>
+                            <code style="display: inline-block; margin-top: 4px; padding: 4px 8px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace;">xattr -cr </code> then drag the file</li>
+                        <li>Press Enter, then open the app normally</li>
                     </ol>
-                    You only need to do this once. The app is safe and <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a>.
+                    <strong>Alternative:</strong> Try to open → System Settings → Privacy & Security → "Open Anyway"<br>
+                    The app is safe and <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a>.
                 </div>
             </div>
         </div>
