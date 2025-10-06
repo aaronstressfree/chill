@@ -185,7 +185,15 @@
                     <path d="M10 14H10.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <div>
-                    <strong>First time installation:</strong> macOS may show a security warning. Go to System Settings → Privacy & Security and click "Open Anyway" to allow the app.
+                    <strong>Important: First time installation</strong><br>
+                    macOS will show a "damaged" warning because the app isn't code-signed. This is normal for free apps without an Apple Developer certificate. To install:
+                    <ol style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
+                        <li>Download and try to open the app (you'll see the warning)</li>
+                        <li>Open <strong>System Settings → Privacy & Security</strong></li>
+                        <li>Scroll down and click <strong>"Open Anyway"</strong> next to the Chill warning</li>
+                        <li>Click <strong>"Open"</strong> in the confirmation dialog</li>
+                    </ol>
+                    You only need to do this once. The app is safe and <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a>.
                 </div>
             </div>
         </div>
