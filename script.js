@@ -72,9 +72,36 @@ function detectProcessor() {
     }
 }
 
+// Fetch download count from GitHub API
+async function fetchDownloadCount() {
+    try {
+        const response = await fetch('https://api.github.com/repos/aaronstressfree/chill/releases');
+        const releases = await response.json();
+
+        let totalDownloads = 0;
+        releases.forEach(release => {
+            release.assets.forEach(asset => {
+                totalDownloads += asset.download_count;
+            });
+        });
+
+        const downloadElement = document.getElementById('download-number');
+        if (downloadElement) {
+            downloadElement.textContent = totalDownloads.toLocaleString();
+        }
+    } catch (error) {
+        console.log('Could not fetch download count:', error);
+        const downloadElement = document.getElementById('download-number');
+        if (downloadElement) {
+            downloadElement.textContent = '—';
+        }
+    }
+}
+
 // Run on page load
 document.addEventListener('DOMContentLoaded', () => {
     detectProcessor();
+    fetchDownloadCount();
     console.log('Chill website loaded successfully');
 });
 
