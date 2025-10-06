@@ -183,13 +183,16 @@
                     <path d="M10 14H10.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <div>
-                    <strong>First time opening:</strong>
+                    <strong>One-time setup:</strong> macOS blocks unsigned apps. Fix in 30 seconds:
                     <ol style="margin: 8px 0; line-height: 1.8;">
-                        <li>Download and unzip Chill</li>
-                        <li><strong>Right-click</strong> the Chill app and choose <strong>"Open"</strong> (don't double-click!)</li>
-                        <li>Click <strong>"Open"</strong> in the dialog</li>
+                        <li>Download and unzip Chill (move to Applications if you want)</li>
+                        <li>Open Terminal and run:<br>
+                            <code style="display: block; margin-top: 4px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; font-family: monospace; font-size: 0.9em;">xattr -cr /Applications/Chill.app</code>
+                            <span style="font-size: 0.9em; opacity: 0.8;">If in Downloads: <code style="padding: 2px 4px; background: rgba(0,0,0,0.2); border-radius: 3px; font-family: monospace;">xattr -cr ~/Downloads/Chill.app</code></span>
+                        </li>
+                        <li>Open Chill normally - works forever after this!</li>
                     </ol>
-                    That's it! No Terminal needed. The app is <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a> and safe.
+                    The app is <a href="https://github.com/aaronstressfree/chill" style="color: inherit; text-decoration: underline;">open source</a> and safe. This is required for all free Mac apps without Apple's $99/year certificate.
                 </div>
             </div>
         </div>
