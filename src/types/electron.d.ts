@@ -44,7 +44,7 @@ export interface ElectronAPI {
   closeWindow: () => Promise<void>;
   minimizeWindow: () => Promise<void>;
   quitApp: () => Promise<void>;
-  onBreakStart: (callback: (event: any, data: { duration: number; type?: 'quick' | 'long' }) => void) => () => void;
+  onBreakStart: (callback: (event: unknown, data: { duration: number; type?: 'quick' | 'long' }) => void) => () => void;
   onBreakEnd: (callback: () => void) => () => void;
 }
 

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { tokens } from '@/theme/tokens';
 import { strings } from '@/constants/strings';
-import { Preferences, CalendarEvent } from '@/types/electron';
+import { Preferences, CalendarEvent, BlockingEvent } from '@/types/electron';
 import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/Switch';
 import { Slider } from '@/components/ui/Slider';
@@ -426,10 +426,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onReloadPreferences
 }) => {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  // const [isPreviewing, setIsPreviewing] = useState(false); // For preview button (commented out)
   const [nextBreakTime, setNextBreakTime] = useState<string | null>(null);
   const [nextBreakType, setNextBreakType] = useState<'quick' | 'long' | null>(null);
-  const [blockingEvent, setBlockingEvent] = useState<{ summary: string; end: string } | null>(null);
+  const [blockingEvent, setBlockingEvent] = useState<BlockingEvent | null>(null);
   const [showEventsModal, setShowEventsModal] = useState(false);
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
@@ -472,44 +471,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       setIsAuthenticating(false);
     }
   };
-
-  // --- PREVIEW FUNCTION (commented out for production) ---
-  // Uncomment this function when re-enabling the preview button:
-  // const handlePreviewBreak = async () => {
-  //   if (isPreviewing) {
-  //     console.log('[SettingsPanel] Preview already in progress, ignoring click');
-  //     return;
-  //   }
-  //   
-  //   console.log('[SettingsPanel] Preview break button clicked');
-  //   setIsPreviewing(true);
-  //   
-  //   try {
-  //     console.log('[SettingsPanel] Calling previewBreak API...');
-  //     const result = await window.electronAPI.previewBreak();
-  //     console.log('[SettingsPanel] Preview result:', result);
-  //     
-  //     if (!result.success) {
-  //       console.error('[SettingsPanel] Preview failed:', result.error);
-  //       setIsPreviewing(false); // Re-enable button immediately on error
-  //       return;
-  //     }
-  //     
-  //     // Reset after break duration + buffer
-  //     const resetDelay = (preferences.quickBreakDuration * 1000) + 2500;
-  //     console.log('[SettingsPanel] Will reset preview button in', resetDelay, 'ms');
-  //     
-  //     setTimeout(() => {
-  //       console.log('[SettingsPanel] Resetting preview button');
-  //       setIsPreviewing(false);
-  //     }, resetDelay);
-  //     
-  //   } catch (error) {
-  //     console.error('[SettingsPanel] Failed to preview break:', error);
-  //     setIsPreviewing(false); // Re-enable button on error
-  //   }
-  // };
-  // --- END PREVIEW FUNCTION ---
 
   const handleGoogleDisconnect = async () => {
     try {
@@ -667,18 +628,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               value={preferences.quickBreakDuration}
               onChange={(value) => onUpdate({ quickBreakDuration: value })}
             />
-            {/* --- PREVIEW BUTTON (commented out for production) ---
-              Uncomment the button below to add the Preview feature back:
-            <Button
-              variant="ghost"
-              size="small"
-              onClick={handlePreviewBreak}
-              disabled={isPreviewing}
-              style={{ marginTop: '12px' }}
-            >
-              {isPreviewing ? 'Showing preview...' : '👁️ Preview Quick Break'}
-            </Button>
-            --- END PREVIEW BUTTON --- */}
           </Setting>
         </DrillRow>
 

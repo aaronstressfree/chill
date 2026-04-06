@@ -24,7 +24,7 @@ const IPC_CHANNELS = {
 // the entire Electron API
 contextBridge.exposeInMainWorld('electronAPI', {
   getPreferences: () => ipcRenderer.invoke(IPC_CHANNELS.GET_PREFERENCES),
-  updatePreferences: (preferences: any) => 
+  updatePreferences: (preferences: Record<string, unknown>) =>
     ipcRenderer.invoke(IPC_CHANNELS.UPDATE_PREFERENCES, preferences),
   getNextBreakTime: () => ipcRenderer.invoke(IPC_CHANNELS.GET_NEXT_BREAK_TIME),
   getBlockingEvent: () => ipcRenderer.invoke(IPC_CHANNELS.GET_BLOCKING_EVENT),
@@ -38,7 +38,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   closeWindow: () => ipcRenderer.invoke(IPC_CHANNELS.CLOSE_WINDOW),
   minimizeWindow: () => ipcRenderer.invoke(IPC_CHANNELS.MINIMIZE_WINDOW),
   quitApp: () => ipcRenderer.invoke(IPC_CHANNELS.QUIT_APP),
-  onBreakStart: (callback: (event: any, data: any) => void) => {
+  onBreakStart: (callback: (event: Electron.IpcRendererEvent, data: { duration: number; type?: 'quick' | 'long' }) => void) => {
     ipcRenderer.on(IPC_CHANNELS.BREAK_START, callback);
     return () => ipcRenderer.removeListener(IPC_CHANNELS.BREAK_START, callback);
   },

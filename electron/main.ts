@@ -1,11 +1,10 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, shell, powerMonitor } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, powerMonitor } from 'electron';
 import * as path from 'path';
 import Store from 'electron-store';
-import { BreakScheduler } from './services/BreakScheduler';
+import { BreakScheduler, BreakSettings } from './services/BreakScheduler';
 import { GoogleCalendarService } from './services/GoogleCalendarService';
 import { WindowManager } from './services/WindowManager';
 import { MESSAGES, IPC_CHANNELS } from './constants/messages';
-import { WINDOW_CONFIG } from './constants/config';
 import { isDevelopment, getAppUrl } from './utils/environment';
 
 // CRITICAL FIX: Disable hardware acceleration to reduce WindowServer conflicts
@@ -204,23 +203,6 @@ function createTray() {
           breakScheduler?.setPaused(newState);
         }
       },
-      // --- DEVELOPER TOOLS (commented out for production) ---
-      // Uncomment the lines below to add Developer Tools back to the menu:
-      // { type: 'separator' },
-      // {
-      //   label: 'Developer Tools',
-      //   click: () => {
-      //     if (mainWindow) {
-      //       if (!mainWindow.isVisible()) {
-      //         toggleMainWindow();
-      //       }
-      //       mainWindow.webContents.openDevTools({ mode: 'detach' });
-      //     } else {
-      //       console.log('[Tray] No main window to open DevTools for');
-      //     }
-      //   }
-      // },
-      // --- END DEVELOPER TOOLS ---
       { type: 'separator' },
       {
         label: MESSAGES.TRAY.quit,
@@ -233,10 +215,6 @@ function createTray() {
   });
 }
 
-function updateTrayMenu() {
-  // Not needed anymore since we use popover window instead of menu
-  // Kept for backward compatibility with other parts of the code
-}
 
 function setupIpcHandlers() {
   ipcMain.handle(IPC_CHANNELS.GET_PREFERENCES, () => {
@@ -285,7 +263,7 @@ function setupIpcHandlers() {
     });
     
     // Only update break scheduler settings if they were actually changed
-    const settingsUpdate: any = {};
+    const settingsUpdate: Partial<BreakSettings> = {};
     
     // Legacy support for old single break settings
     if (preferences.breakInterval !== undefined) {
@@ -336,9 +314,6 @@ function setupIpcHandlers() {
       });
     }
     
-    console.log('[Main] Updating tray menu');
-    updateTrayMenu();
-    
     if (preferences.isPaused !== undefined) {
       console.log('[Main] Setting paused state:', preferences.isPaused);
       // Track that this is a manual pause/unpause (not from power management)
@@ -361,7 +336,7 @@ function setupIpcHandlers() {
   });
 
   // Auth callback is now handled internally by GoogleCalendarService
-  ipcMain.handle(IPC_CHANNELS.GOOGLE_AUTH_CALLBACK, async (_, code) => {
+  ipcMain.handle(IPC_CHANNELS.GOOGLE_AUTH_CALLBACK, async () => {
     return { success: true };
   });
 

@@ -1,10 +1,9 @@
-import { google } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import { google, calendar_v3 } from 'googleapis';
+import { OAuth2Client, Credentials } from 'google-auth-library';
 import Store from 'electron-store';
 import { shell } from 'electron';
+import * as http from 'http';
 
-// Google OAuth credentials — set via environment variables
-// Get your own from: https://console.cloud.google.com/apis/credentials
 const GOOGLE_CONFIG = {
   CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
@@ -12,27 +11,21 @@ const GOOGLE_CONFIG = {
   SCOPES: ['https://www.googleapis.com/auth/calendar.readonly']
 };
 
-/**
- * Determine if an event is a solo block (only the user, no other attendees).
- * Solo events like lunch blocks, focus time, etc. are auto-skipped
- * so break reminders still fire during them.
- */
-function isSoloEvent(event: any): boolean {
+type CalendarEvent = calendar_v3.Schema$Event;
+
+function isSoloEvent(event: CalendarEvent): boolean {
   const attendees = event.attendees || [];
-  // No attendees listed — it's a personal block
   if (attendees.length === 0) return true;
-  // Only one attendee (the user themselves)
   if (attendees.length === 1 && attendees[0].self) return true;
-  // All attendees are self (shouldn't happen, but be safe)
-  if (attendees.every((a: any) => a.self)) return true;
+  if (attendees.every((a) => a.self)) return true;
   return false;
 }
 
 export class GoogleCalendarService {
   private oauth2Client: OAuth2Client;
   private store: Store;
-  private calendar: any;
-  private authServer: any = null;
+  private calendar: calendar_v3.Calendar;
+  private authServer: http.Server | null = null;
 
   constructor(store: Store) {
     this.store = store;
@@ -50,19 +43,10 @@ export class GoogleCalendarService {
   }
 
   private restoreTokens() {
-    const tokens = this.store.get('googleTokens') as any;
+    const tokens = this.store.get('googleTokens') as Credentials | undefined;
     if (tokens) {
       this.oauth2Client.setCredentials(tokens);
     }
-  }
-
-  async getAuthUrl(): Promise<string> {
-    const authUrl = this.oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: GOOGLE_CONFIG.SCOPES,
-      prompt: 'consent'
-    });
-    return authUrl;
   }
 
   async startAuthFlow(): Promise<boolean> {
@@ -75,9 +59,7 @@ export class GoogleCalendarService {
         prompt: 'consent'
       });
 
-      // Start local server to handle OAuth callback
-      const http = require('http');
-      this.authServer = http.createServer(async (req: any, res: any) => {
+      this.authServer = http.createServer(async (req: http.IncomingMessage, res: http.ServerResponse) => {
         if (req.url?.startsWith('/oauth/callback')) {
           const url = new URL(req.url, `http://localhost:8085`);
           const code = url.searchParams.get('code');
@@ -150,7 +132,7 @@ export class GoogleCalendarService {
 
   async disconnect(): Promise<void> {
     try {
-      const tokens = this.store.get('googleTokens') as any;
+      const tokens = this.store.get('googleTokens') as Credentials | undefined;
       if (tokens && tokens.access_token) {
         // Revoke the token
         await this.oauth2Client.revokeToken(tokens.access_token).catch(() => {});
@@ -162,9 +144,9 @@ export class GoogleCalendarService {
     this.store.set('googleCalendarEnabled', false);
   }
 
-  async getCurrentEvents(): Promise<any[]> {
+  async getCurrentEvents(): Promise<CalendarEvent[]> {
     try {
-      const tokens = this.store.get('googleTokens') as any;
+      const tokens = this.store.get('googleTokens') as Credentials | undefined;
       if (!tokens) {
         return [];
       }
@@ -194,7 +176,7 @@ export class GoogleCalendarService {
       // BUT exclude:
       // - All-day events (they don't have specific time blocks)
       // - Events with "focus" in the title (those are focus time blocks where breaks are good!)
-      return events.filter((event: any) => {
+      return events.filter((event: CalendarEvent) => {
         if (!event.start || !event.end) return false;
         
         // Skip all-day events (they only have 'date', not 'dateTime')
@@ -221,9 +203,9 @@ export class GoogleCalendarService {
     }
   }
 
-  async getUpcomingEvents(hours: number = 24): Promise<any[]> {
+  async getUpcomingEvents(hours: number = 24): Promise<{ summary: string; start: string; end: string; skipped: boolean; skipReason: string }[]> {
     try {
-      const tokens = this.store.get('googleTokens') as any;
+      const tokens = this.store.get('googleTokens') as Credentials | undefined;
       if (!tokens) {
         return [];
       }
@@ -253,7 +235,7 @@ export class GoogleCalendarService {
 
       const events = response.data.items || [];
       
-      return events.map((event: any) => {
+      return events.map((event: CalendarEvent) => {
         const isAllDay = !event.start?.dateTime || !event.end?.dateTime;
         const isSolo = isSoloEvent(event);
         const skipped = isAllDay || isSolo;
@@ -267,8 +249,8 @@ export class GoogleCalendarService {
         
         return {
           summary: event.summary || 'Untitled Event',
-          start: event.start?.dateTime || event.start?.date,
-          end: event.end?.dateTime || event.end?.date,
+          start: event.start?.dateTime || event.start?.date || '',
+          end: event.end?.dateTime || event.end?.date || '',
           skipped,
           skipReason,
         };
@@ -280,7 +262,7 @@ export class GoogleCalendarService {
   }
 
   isAuthenticated(): boolean {
-    const tokens = this.store.get('googleTokens') as any;
+    const tokens = this.store.get('googleTokens') as Credentials | undefined;
     return !!tokens && !!tokens.access_token;
   }
 }

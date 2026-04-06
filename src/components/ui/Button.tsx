@@ -133,15 +133,15 @@ const StyledButton = styled(motion.button)<ButtonProps>`
 `;
 
 export const Button: React.FC<
-  ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>
-> = ({ 
-  children, 
+  ButtonProps & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag' | 'style'> & { style?: React.CSSProperties }
+> = ({
+  children,
   variant = 'primary',
   size = 'medium',
   fullWidth = false,
   disabled = false,
   onClick,
-  ...props 
+  ...props
 }) => {
   return (
     <StyledButton
@@ -153,7 +153,7 @@ export const Button: React.FC<
       whileHover={{ scale: disabled ? 1 : 1.02 }}
       whileTap={{ scale: disabled ? 1 : 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      {...(props as any)}
+      {...props}
     >
       {children}
     </StyledButton>

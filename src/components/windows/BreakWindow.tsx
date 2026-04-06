@@ -283,7 +283,7 @@ export const BreakWindow: React.FC = () => {
     
     // === EVENT LISTENER 1: BREAK START ===
     // This is triggered by WindowManager after creating the window
-    const unsubscribeStart = window.electronAPI.onBreakStart((_event, data) => {
+    const unsubscribeStart = window.electronAPI.onBreakStart((_event: unknown, data) => {
       console.log('[BreakWindow] ===== BREAK_START EVENT RECEIVED =====');
       console.log('[BreakWindow] Data received:', JSON.stringify(data));
       console.log('[BreakWindow] Duration:', data.duration);

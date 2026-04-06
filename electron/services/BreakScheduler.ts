@@ -3,7 +3,7 @@ import { GoogleCalendarService } from './GoogleCalendarService';
 import { WindowManager } from './WindowManager';
 import { TIMING_CONFIG } from '../constants/config';
 
-interface BreakSettings {
+export interface BreakSettings {
   quickBreakInterval: number;  // minutes
   quickBreakDuration: number;  // seconds
   longBreakInterval: number;   // minutes
@@ -21,8 +21,6 @@ export class BreakScheduler {
   private calendarCheckTimer: NodeJS.Timeout | null = null;
   private isPaused: boolean = false;
   private settings: BreakSettings;
-  private lastQuickBreakTime: Date | null = null;
-  private lastLongBreakTime: Date | null = null;
   private nextQuickBreakTime: Date | null = null;
   private nextLongBreakTime: Date | null = null;
 
@@ -162,7 +160,7 @@ export class BreakScheduler {
     return `${seconds}s`;
   }
 
-  getNextBreakType(): 'quick' | 'long' | null {
+  getNextBreakType(): BreakType | null {
     if (this.isPaused || (!this.nextQuickBreakTime && !this.nextLongBreakTime)) {
       return null;
     }
@@ -290,12 +288,6 @@ export class BreakScheduler {
     if (this.isPaused) {
       console.log('[BreakScheduler] Breaks are paused, not triggering break...');
       return;
-    }
-    
-    if (type === 'quick') {
-      this.lastQuickBreakTime = new Date();
-    } else {
-      this.lastLongBreakTime = new Date();
     }
     
     const duration = type === 'quick' 
