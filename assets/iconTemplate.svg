@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <!-- Coffee cup icon optimized for menu bar -->
+  <g fill="black">
+    <!-- Cup body -->
+    <path d="M 4 5.6 
+             L 4 11.2 
+             Q 4 13.6 5.6 13.6
+             L 10.4 13.6
+             Q 12 13.6 12 11.2
+             L 12 5.6
+             Z"/>
+    
+    <!-- Handle -->
+    <path d="M 12 7.2
+             Q 14.4 7.2 14.4 9.6
+             Q 14.4 11.2 12.8 11.2
+             L 12 11.2
+             L 12 9.6
+             L 12.8 9.6
+             Q 13.12 9.6 13.12 8.8
+             Q 13.12 8 12.8 8
+             L 12 8
+             Z"/>
+    
+    <!-- Steam lines (3 wavy lines) -->
+    <path d="M 5.6 2.4
+             Q 5.6 4 5.92 4.8"
+          stroke="black" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    <path d="M 8 1.6
+             Q 8 3.2 8.32 4"
+          stroke="black" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    <path d="M 10.4 2.4
+             Q 10.4 4 10.72 4.8"
+          stroke="black" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

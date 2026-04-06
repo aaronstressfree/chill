@@ -1,132 +1,196 @@
-# Chill Website
+# Chill - Mindful Break Reminder for Mac
 
-A simple, beautiful static website for the Chill app download page.
-
-## Hosting Options
-
-This is a pure static website (HTML, CSS, JS) that can be hosted **for free** on any of these platforms:
-
-### 1. GitHub Pages (Recommended - Easiest)
-
-1. Create a new repository (e.g., `chill-website`)
-2. Push the contents of this `website` folder to the repository
-3. Go to repository Settings → Pages
-4. Select branch `main` and folder `/` (root)
-5. Your site will be live at `https://yourusername.github.io/chill-website`
-
-### 2. Netlify (Great for custom domains)
-
-1. Go to [netlify.com](https://netlify.com) and sign up
-2. Click "Add new site" → "Import an existing project"
-3. Connect to your Git repository or drag & drop this folder
-4. Deploy! Your site will be live at `https://your-site-name.netlify.app`
-5. Optional: Add a custom domain for free
-
-### 3. Vercel (Similar to Netlify)
-
-1. Go to [vercel.com](https://vercel.com) and sign up
-2. Click "New Project"
-3. Import your Git repository or upload this folder
-4. Deploy! Your site will be live at `https://your-site-name.vercel.app`
-
-### 4. Cloudflare Pages
-
-1. Go to [pages.cloudflare.com](https://pages.cloudflare.com)
-2. Create a new project
-3. Connect your Git repository or upload files
-4. Deploy! Includes free CDN and DDoS protection
-
-## Hosting the Download Files
-
-Currently, the download links point to `./downloads/` which doesn't exist yet. You have several options:
-
-### Option 1: Host Files with the Website
-1. Create a `downloads` folder in this directory
-2. Copy your DMG and ZIP files from `/release/` to `downloads/`
-3. Deploy everything together
-
-### Option 2: Use GitHub Releases (Recommended)
-1. Create a GitHub repository for your app
-2. Create a new Release
-3. Upload your DMG and ZIP files as release assets
-4. Update the download URLs in `index.html` to point to the GitHub release URLs
-   - Example: `https://github.com/yourusername/chill/releases/download/v1.0.0/Chill-1.0.0-arm64.dmg`
-
-### Option 3: Use a CDN
-- Upload files to a service like:
-  - Cloudflare R2 (free tier)
-  - Backblaze B2 (free tier)
-  - AWS S3 (pay as you go)
-- Update the URLs in `index.html`
-
-## Setup Instructions
-
-1. **Update GitHub Link:**
-   - Open `index.html`
-   - Replace `https://github.com/yourusername/chill` with your actual GitHub URL
-   - (Or remove the GitHub section if you don't want to link to source code)
-
-2. **Update Download URLs:**
-   - Decide where you'll host the DMG/ZIP files
-   - Update all download links in `index.html` with the correct URLs
-
-3. **Optional: Add Analytics:**
-   - Add Google Analytics, Plausible, or similar to track downloads
-   - Insert tracking code in `index.html` before `</head>`
-
-4. **Test Locally:**
-   ```bash
-   # Simple Python server
-   python3 -m http.server 8000
-   
-   # Or use any local server
-   # Then visit http://localhost:8000
-   ```
-
-5. **Deploy:**
-   - Follow one of the hosting options above
-   - Your site will be live in minutes!
-
-## Customization
-
-All styling is in `styles.css` with CSS custom properties at the top for easy theme changes:
-
-- Colors: `--color-*` variables
-- Spacing: `--spacing-*` variables
-- Typography: `--font-size-*` variables
-- Border radius: `--radius-*` variables
+A beautiful, native Mac app that reminds you to take regular breaks while respecting your Google Calendar schedule. Never get interrupted during important meetings again!
 
 ## Features
 
-- ✨ Beautiful, modern design
-- 📱 Fully responsive (mobile → desktop)
-- ⚡ Fast loading (no frameworks)
-- 🎨 Inter font family
-- 🌙 Dark theme
-- ♿ Accessible HTML
-- 🔍 SEO friendly
-- 📊 Analytics ready
+✨ **Smart Break Scheduling**
+- Customizable break intervals (5-60 minutes)
+- Adjustable break duration (5-30 seconds)
+- Automatically pauses during Google Calendar meetings
+- Beautiful, non-intrusive break notifications
 
-## File Structure
+🎨 **Thoughtful Design**
+- Clean, modern interface with Inter typeface
+- Smooth animations powered by Framer Motion
+- Native Mac app experience
+- System tray integration for quick access
+
+🔗 **Google Calendar Integration**
+- OAuth2 authentication
+- Real-time meeting detection
+- Privacy-focused (read-only calendar access)
+
+⚙️ **Customization Options**
+- Start automatically at login
+- Pause/resume breaks anytime
+- Adjustable timing preferences
+- Minimal resource usage
+
+## Setup Instructions
+
+### Prerequisites
+
+- macOS 10.15 or later
+- Node.js 18+ and npm
+- Google Cloud Console account (for Calendar API)
+
+### Installation
+
+1. **Clone the repository and install dependencies:**
+
+```bash
+cd /Users/aaronstevens/Documents/chill
+npm install
+```
+
+2. **Set up Google Calendar API:**
+
+   a. Go to [Google Cloud Console](https://console.cloud.google.com/)
+   
+   b. Create a new project or select an existing one
+   
+   c. Enable the Google Calendar API:
+      - Navigate to "APIs & Services" → "Library"
+      - Search for "Google Calendar API"
+      - Click "Enable"
+   
+   d. Create OAuth 2.0 credentials:
+      - Go to "APIs & Services" → "Credentials"
+      - Click "Create Credentials" → "OAuth client ID"
+      - Select "Desktop" as application type
+      - Add `http://localhost:3000/auth/callback` as authorized redirect URI
+      - Download the credentials JSON file
+   
+   e. Update the configuration:
+      - Open `electron/constants/config.ts`
+      - Replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your actual credentials
+
+3. **Create icon assets (optional):**
+
+```bash
+mkdir -p assets
+# Add your tray-icon.png (16x16 or 32x32) to the assets folder
+# Add your icon.icns for the app icon
+```
+
+### Development
+
+Run the app in development mode:
+
+```bash
+npm run dev
+```
+
+This will start both the Electron main process and the React dev server.
+
+### Building for Production
+
+Build the Mac app:
+
+```bash
+npm run dist
+```
+
+The built app will be in the `release` folder.
+
+### Testing
+
+1. Launch the app
+2. Click on the menu bar icon to access preferences
+3. Adjust break intervals and duration
+4. Connect your Google Calendar (optional)
+5. The app will start scheduling breaks automatically
+
+## Project Structure
 
 ```
-website/
-├── index.html       # Main HTML file
-├── styles.css       # All styling
-├── script.js        # Interactivity
-└── README.md        # This file
+chill/
+├── electron/           # Electron main process
+│   ├── main.ts        # App entry point
+│   ├── preload.ts     # Secure IPC bridge
+│   ├── services/      # Core business logic
+│   │   ├── BreakScheduler.ts
+│   │   ├── GoogleCalendarService.ts
+│   │   └── WindowManager.ts
+│   └── constants/     # Configuration & messages
+├── src/               # React renderer process
+│   ├── components/    # UI components
+│   │   ├── ui/       # Reusable components
+│   │   ├── windows/  # App windows
+│   │   └── settings/ # Settings panels
+│   ├── theme/        # Design tokens & styles
+│   ├── constants/    # App strings
+│   └── types/        # TypeScript definitions
+├── assets/           # Icons and images
+└── dist/            # Build output
 ```
 
-## Cost Breakdown
+## Architecture Notes
 
-- **Hosting**: $0 (GitHub Pages, Netlify, Vercel, or Cloudflare Pages)
-- **Domain** (optional): ~$10-15/year
-- **File storage**: $0 (if using GitHub Releases)
-- **Bandwidth**: $0 (all platforms have generous free tiers)
+The app follows a modular architecture with clear separation of concerns:
 
-**Total: FREE** (or ~$12/year with custom domain)
+- **Main Process** (Electron): Handles system integration, window management, and scheduling
+- **Renderer Process** (React): Manages UI and user interactions
+- **IPC Bridge**: Secure communication between processes via contextBridge
+- **Services**: Isolated business logic for breaks, calendar, and windows
+- **Theme System**: Centralized design tokens for consistent styling
+- **Constants**: All strings and configuration in dedicated files
 
-## Support
+## Configuration
 
-For issues with the website, contact your repository maintainer.
+The app stores preferences using `electron-store` in:
+- macOS: `~/Library/Application Support/chill-break-reminder/`
 
+Settings include:
+- Break interval (minutes)
+- Break duration (seconds)
+- Google Calendar connection status
+- Pause state
+- Start at login preference
+
+## Privacy & Security
+
+- Calendar access is read-only
+- OAuth tokens are stored securely using electron-store
+- No data is sent to external servers (except Google Calendar API)
+- All processing happens locally on your Mac
+
+## Troubleshooting
+
+**App doesn't start:**
+- Check that all dependencies are installed: `npm install`
+- Verify Node.js version: `node --version` (should be 18+)
+
+**Google Calendar not connecting:**
+- Ensure you've set up OAuth credentials correctly
+- Check that redirect URI matches exactly: `http://localhost:3000/auth/callback`
+- Try disconnecting and reconnecting in settings
+
+**Breaks not appearing:**
+- Check that breaks aren't paused in the menu bar
+- Verify you're not in a calendar meeting
+- Check system notification permissions
+
+**Build fails:**
+- Clear build cache: `rm -rf dist/ release/`
+- Reinstall dependencies: `rm -rf node_modules && npm install`
+
+## Contributing
+
+Feel free to submit issues and pull requests. Please follow the existing code style and architecture patterns.
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Acknowledgments
+
+- Built with Electron, React, and TypeScript
+- UI animations powered by Framer Motion
+- Typography by Inter
+- Inspired by the need for healthier work habits
+
+---
+
+Made with ❤️ for a healthier, more mindful workday

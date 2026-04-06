@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cupGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="steamGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#999999;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#CCCCCC;stop-opacity:0.3" />
+    </linearGradient>
+    <radialGradient id="coffeeGradient" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#6F4E37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A3424;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="512" cy="512" r="491.52" fill="url(#cupGradient)"/>
+  
+  <!-- Steam lines (wavy and elegant) -->
+  <g opacity="0.7">
+    <path d="M 358.4 153.6 Q 337.92 204.8 358.4 256 Q 378.88 307.2 358.4 358.4" 
+          stroke="url(#steamGradient)" stroke-width="20.48" fill="none" stroke-linecap="round"/>
+    <path d="M 512 102.4 Q 491.52 153.6 512 204.8 Q 532.48 256 512 307.2" 
+          stroke="url(#steamGradient)" stroke-width="20.48" fill="none" stroke-linecap="round"/>
+    <path d="M 665.6 153.6 Q 686.08 204.8 665.6 256 Q 645.12 307.2 665.6 358.4" 
+          stroke="url(#steamGradient)" stroke-width="20.48" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Cup body with gradient -->
+  <path d="M 286.72 409.6 
+           L 286.72 716.8 
+           Q 286.72 819.2 358.4 839.68
+           L 665.6 839.68
+           Q 737.28 819.2 737.28 716.8
+           L 737.28 409.6
+           Z"
+        fill="#FFFFFF" opacity="0.95"/>
+  
+  <!-- Coffee inside cup -->
+  <ellipse cx="512" cy="440.32" rx="204.8" ry="40.96" fill="url(#coffeeGradient)"/>
+  
+  <!-- Cup handle -->
+  <path d="M 737.28 512
+           Q 870.4 512 870.4 634.88
+           Q 870.4 737.28 768 737.28
+           L 737.28 737.28
+           L 737.28 686.08
+           L 768 686.08
+           Q 798.72 686.08 798.72 634.88
+           Q 798.72 563.2 768 563.2
+           L 737.28 563.2
+           Z"
+        fill="#FFFFFF" opacity="0.9"/>
+  
+  <!-- Saucer -->
+  <ellipse cx="512" cy="849.92" rx="286.72" ry="51.2" fill="#FFFFFF" opacity="0.85"/>
+</svg>
