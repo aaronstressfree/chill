@@ -1,0 +1,75 @@
+{
+  "name": "chill-break-reminder",
+  "version": "1.0.5",
+  "description": "A Mac app for mindful breaks that respects your Google Calendar",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:electron\" \"npm run dev:react\"",
+    "dev:electron": "tsc -w -p electron",
+    "dev:react": "vite",
+    "restart": "./restart-dev.sh",
+    "build": "npm run build:react && npm run build:electron && electron-builder",
+    "build:react": "tsc && vite build",
+    "build:electron": "tsc -p electron",
+    "dist": "npm run build && electron-builder",
+    "postinstall": "electron-builder install-app-deps",
+    "icons:create": "node create-tray-icon.js && node convert-icons-to-png.js"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.42",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "concurrently": "^8.2.2",
+    "electron": "^27.1.3",
+    "electron-builder": "^24.9.1",
+    "eslint": "^8.54.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "sharp": "^0.34.4",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.4"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "axios": "^1.6.2",
+    "date-fns": "^2.30.0",
+    "electron-store": "^8.1.0",
+    "framer-motion": "^10.16.5",
+    "googleapis": "^128.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0"
+  },
+  "build": {
+    "appId": "com.chill.breakreminder",
+    "productName": "Chill",
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "files": [
+      "dist/**/*",
+      "!dist/renderer/.vite",
+      "assets/*.png",
+      "assets/*.icns",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "dist/electron/main.js"
+    }
+  }
+}
