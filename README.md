@@ -21,6 +21,13 @@ A beautiful, native Mac app that reminds you to take regular breaks while respec
 - Real-time meeting detection
 - Privacy-focused (read-only calendar access)
 
+🕐 **Active Hours**
+- Set your working hours (default: 9 AM – 6 PM)
+- Breaks only trigger during active hours
+- Uses your computer's local time zone
+- Supports overnight ranges (e.g. 10 PM – 6 AM)
+- Toggle on/off anytime
+
 ⚙️ **Customization Options**
 - Start automatically at login
 - Pause/resume breaks anytime
@@ -146,6 +153,7 @@ Settings include:
 - Break interval (minutes)
 - Break duration (seconds)
 - Google Calendar connection status
+- Active hours (start/end time, enabled/disabled)
 - Pause state
 - Start at login preference
 

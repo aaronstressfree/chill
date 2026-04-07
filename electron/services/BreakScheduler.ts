@@ -250,6 +250,43 @@ export class BreakScheduler {
       }
     }
     
+    // Check if we're outside active hours
+    const activeHoursEnabled = this.store.get('activeHoursEnabled', true) as boolean;
+    if (activeHoursEnabled) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const start = this.store.get('activeHoursStart', 9) as number;
+      const end = this.store.get('activeHoursEnd', 18) as number;
+
+      let outsideActiveHours: boolean;
+      if (start < end) {
+        // Normal range (e.g. 9-18)
+        outsideActiveHours = currentHour < start || currentHour >= end;
+      } else if (start > end) {
+        // Overnight range (e.g. 22-6)
+        outsideActiveHours = currentHour >= end && currentHour < start;
+      } else {
+        // start === end means 24 hours, never outside
+        outsideActiveHours = false;
+      }
+
+      if (outsideActiveHours) {
+        console.log(`[BreakScheduler] Outside active hours (${start}:00-${end}:00), current hour: ${currentHour}. Postponing ${type} break for 5 minutes.`);
+        const timer = setTimeout(() => {
+          this.checkAndTriggerBreak(type);
+        }, 5 * 60 * 1000);
+
+        if (type === 'quick') {
+          this.quickBreakTimer = timer;
+          this.nextQuickBreakTime = new Date(Date.now() + 5 * 60 * 1000);
+        } else {
+          this.longBreakTimer = timer;
+          this.nextLongBreakTime = new Date(Date.now() + 5 * 60 * 1000);
+        }
+        return;
+      }
+    }
+
     // Check if we should pause during meetings (only if user has this setting enabled)
     const pauseDuringMeetings = this.store.get('pauseDuringMeetings', true) as boolean;
     

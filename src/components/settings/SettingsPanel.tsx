@@ -524,6 +524,23 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return preferences.googleCalendarEnabled ? 'Connected' : 'Not connected';
   };
 
+  const formatHour = (hour: number) => {
+    if (hour === 0) return '12:00 AM';
+    if (hour === 12) return '12:00 PM';
+    if (hour < 12) return `${hour}:00 AM`;
+    return `${hour - 12}:00 PM`;
+  };
+
+  const getActiveHoursSummary = () => {
+    if (!preferences.activeHoursEnabled) return 'Off';
+    return `${formatHour(preferences.activeHoursStart)} – ${formatHour(preferences.activeHoursEnd)}`;
+  };
+
+  const hourOptions = Array.from({ length: 24 }, (_, i) => ({
+    value: String(i),
+    label: formatHour(i)
+  }));
+
   return (
     <Container>
       <Header>
@@ -738,6 +755,54 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   {strings.settings.calendar.disconnectButton}
                 </Button>
               </div>
+            </>
+          )}
+        </DrillRow>
+
+        <DrillRow
+          icon="🕐"
+          title="Active Hours"
+          subtitle="Only show breaks during work hours"
+          summary={getActiveHoursSummary()}
+        >
+          <Setting>
+            <SettingHeader>
+              <SettingLabel>Enable Active Hours</SettingLabel>
+              <Switch
+                checked={preferences.activeHoursEnabled}
+                onChange={(checked) => onUpdate({ activeHoursEnabled: checked })}
+              />
+            </SettingHeader>
+            <SettingDescription>
+              Only schedule breaks during your active hours. Uses your computer's local time zone.
+            </SettingDescription>
+          </Setting>
+
+          {preferences.activeHoursEnabled && (
+            <>
+              <Setting>
+                <SettingHeader>
+                  <SettingLabel>Start Time</SettingLabel>
+                  <SettingValue>{formatHour(preferences.activeHoursStart)}</SettingValue>
+                </SettingHeader>
+                <Select
+                  value={String(preferences.activeHoursStart)}
+                  onChange={(value) => onUpdate({ activeHoursStart: Number(value) })}
+                  options={hourOptions}
+                />
+              </Setting>
+
+              <Setting>
+                <SettingHeader>
+                  <SettingLabel>End Time</SettingLabel>
+                  <SettingValue>{formatHour(preferences.activeHoursEnd)}</SettingValue>
+                </SettingHeader>
+                <Select
+                  value={String(preferences.activeHoursEnd)}
+                  onChange={(value) => onUpdate({ activeHoursEnd: Number(value) })}
+                  options={hourOptions}
+                />
+              </Setting>
             </>
           )}
         </DrillRow>

@@ -12,6 +12,9 @@ export interface Preferences {
   isPaused: boolean;
   googleCalendarEnabled: boolean;
   pauseDuringMeetings: boolean;
+  activeHoursEnabled: boolean;
+  activeHoursStart: number;  // 0-23, hour in local timezone
+  activeHoursEnd: number;    // 0-23, hour in local timezone
   startAtLogin: boolean;
   theme: 'light' | 'dark' | 'system';
   soundEnabled: boolean;

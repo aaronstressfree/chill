@@ -232,6 +232,9 @@ function setupIpcHandlers() {
       isPaused: store.get('isPaused', false),
       googleCalendarEnabled: store.get('googleCalendarEnabled', false),
       pauseDuringMeetings: store.get('pauseDuringMeetings', true),
+      activeHoursEnabled: store.get('activeHoursEnabled', true),
+      activeHoursStart: store.get('activeHoursStart', 9),
+      activeHoursEnd: store.get('activeHoursEnd', 18),
       startAtLogin: store.get('startAtLogin', true),
       theme: store.get('theme', 'system'),
       soundEnabled: store.get('soundEnabled', true)
