@@ -541,26 +541,47 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     label: formatHour(i)
   }));
 
+  const isOutsideActiveHours = (() => {
+    if (!preferences.activeHoursEnabled) return false;
+    const currentHour = new Date().getHours();
+    const start = preferences.activeHoursStart;
+    const end = preferences.activeHoursEnd;
+    if (start < end) return currentHour < start || currentHour >= end;
+    if (start > end) return currentHour >= end && currentHour < start;
+    return false; // start === end means 24h
+  })();
+
   return (
     <Container>
       <Header>
         <Title>{strings.settings.title}</Title>
         <Subtitle>{strings.app.tagline}</Subtitle>
-        {blockingEvent && !preferences.isPaused && (
+        {isOutsideActiveHours && !preferences.isPaused && (
+          <NextBreakTimer>
+            <BreakIcon>🌙</BreakIcon>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontWeight: 600 }}>Outside active hours</span>
+              <span style={{ fontSize: '13px', opacity: 0.8 }}>
+                Breaks resume at {formatHour(preferences.activeHoursStart)}
+              </span>
+            </div>
+          </NextBreakTimer>
+        )}
+        {blockingEvent && !preferences.isPaused && !isOutsideActiveHours && (
           <NextBreakTimer style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' }}>
             <BreakIcon>📅</BreakIcon>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <span style={{ fontWeight: 600 }}>In meeting - breaks paused</span>
               <span style={{ fontSize: '13px', opacity: 0.8 }}>
-                {blockingEvent.summary} until {new Date(blockingEvent.end).toLocaleTimeString('en-US', { 
-                  hour: 'numeric', 
-                  minute: '2-digit' 
+                {blockingEvent.summary} until {new Date(blockingEvent.end).toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit'
                 })}
               </span>
             </div>
           </NextBreakTimer>
         )}
-        {!blockingEvent && nextBreakTime && !preferences.isPaused && (
+        {!blockingEvent && !isOutsideActiveHours && nextBreakTime && !preferences.isPaused && (
           <NextBreakTimer>
             <BreakIcon>{nextBreakType === 'long' ? '☕' : '⚡'}</BreakIcon>
             <span>
