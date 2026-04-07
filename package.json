@@ -1,6 +1,6 @@
 {
   "name": "chill-break-reminder",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Mac app for mindful breaks that respects your Google Calendar",
   "main": "dist/electron/main.js",
   "scripts": {
